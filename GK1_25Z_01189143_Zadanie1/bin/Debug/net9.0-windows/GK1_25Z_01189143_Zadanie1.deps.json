@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "GK1_25Z_01189143_Zadanie1/1.0.0": {
+        "runtime": {
+          "GK1_25Z_01189143_Zadanie1.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GK1_25Z_01189143_Zadanie1/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
