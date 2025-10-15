@@ -1,4 +1,5 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System;
+using System.Drawing.Drawing2D;
 
 namespace GK1_25Z_01189143_Zadanie1
 {
@@ -6,12 +7,52 @@ namespace GK1_25Z_01189143_Zadanie1
     {
         private List<Button> buttons = new List<Button>();
         private Bitmap canvas;
+        private Bitmap offscreen;
+
+        private Button? selectedButton = null;
+        private bool isDragging = false;
+
         public Form1()
         {
             InitializeComponent();
-            canvas = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
-            MakeSetup();
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint |
+                          ControlStyles.UserPaint |
+                          ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
 
+            canvas = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+            offscreen = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+            this.Resize += Form1_Resize;
+            MakeSetup();
+           
+        }
+
+        private void Form1_Resize(object? sender, EventArgs e)
+        {
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0)
+                return;
+
+            Bitmap oldCanvas = canvas;
+            offscreen.Dispose();
+
+            canvas = new Bitmap(ClientSize.Width, ClientSize.Height);
+            offscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+
+            if (oldCanvas != null)
+            {
+                using (Graphics g = Graphics.FromImage(canvas))
+                {
+                    g.DrawImage(oldCanvas, 0, 0);
+                }
+                using( Graphics og = Graphics.FromImage(offscreen))
+                {
+                    og.DrawImage(oldCanvas, 0, 0);
+                }
+                oldCanvas.Dispose();
+            }
+           
+            Invalidate();
         }
 
 
@@ -42,7 +83,12 @@ namespace GK1_25Z_01189143_Zadanie1
                 drawPath(start, end, Color.Red);
             }
 
+            using (Graphics g = Graphics.FromImage(canvas))
+                g.DrawImage(offscreen, 0, 0);
+            Invalidate();
+
         }
+
         private void MakeButton(int top, int left)
         {
             Button btn = new Button();
@@ -61,10 +107,66 @@ namespace GK1_25Z_01189143_Zadanie1
             btn.FlatAppearance.BorderSize = 0; // grubość obramowania
             btn.Region = new Region(path);
 
+            btn.MouseDown += MouseDownBtn;
+            btn.MouseMove += MouseMoveBtn;
+            btn.MouseUp += MouseUpBtn;
+
             this.Controls.Add(btn);
         }
 
-        
+        private void MouseUpBtn(object? sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                selectedButton = null;
+            }
+        }
+
+        private void MouseMoveBtn(object? sender, MouseEventArgs e)
+        {
+            if(isDragging && selectedButton != null)
+            {
+                
+
+                int index = buttons.IndexOf(selectedButton);
+
+                if (index == -1) throw new Exception("Invalid button"); 
+
+                Button prev = buttons[(index - 1 + buttons.Count) % buttons.Count];
+                Button next = buttons[(index + 1) % buttons.Count];
+
+                clearPath(prev, selectedButton);
+                clearPath(selectedButton, next);
+
+                Point cursor = this.PointToClient(Cursor.Position);
+                var point = new Point(
+                    cursor.X - (selectedButton.Width / 2),
+                    cursor.Y - (selectedButton.Height / 2));
+                selectedButton.Location = point;
+
+
+
+                drawPath(prev, selectedButton, Color.Red);
+                drawPath(selectedButton, next, Color.Red);
+
+                using (Graphics g = Graphics.FromImage(canvas))
+                    g.DrawImage(offscreen, 0, 0);
+                Invalidate();
+
+            }
+        }
+
+        private void MouseDownBtn(object? sender, MouseEventArgs e)
+        {
+            if(sender is Button btn && e.Button == MouseButtons.Left)
+            {
+                selectedButton = btn;
+              
+                isDragging = true;
+                btn.Capture = true;
+            }
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -80,43 +182,63 @@ namespace GK1_25Z_01189143_Zadanie1
             int x1 = b.Left + b.Width / 2;
             int y1 = b.Top + b.Height / 2;
 
-            int dx = x1 - x0;
-            int dy = y1 - y0;
+            int dx = Math.Abs(x1 - x0);
+            int dy = Math.Abs(y1 - y0);
+    
+            int sx = x0 < x1 ? 1 : -1;
+            int sy = y0 < y1 ? 1 : -1;
 
-            int d = 2 * dy - dx;
-
-            int incrE = 2 * dy; 
-            int incrNE = 2 * (dy - dx); 
             int x = x0;
             int y = y0;
 
-            if (x >= 0 && x < canvas.Width && y >= 0 && y < canvas.Height)
-                canvas.SetPixel(x, y, color);
+            if (x >= 0 && x < offscreen.Width && y >= 0 && y < offscreen.Height)
+                offscreen.SetPixel(x, y, color);
 
-           
+            int e;
 
-            while (x<x1)
+            if (dx >= dy)
             {
-
-                if (d < 0) //choose E
+                e = dx / 2;
+                for (int i = 0; i < dx; i++)
                 {
-                    d += incrE;
-                    x++;
-                }
-                else //choose NE
-                {
-                    d += incrNE;
-                    x++;
-                    y++;
-                }
-                if (x >= 0 && x < canvas.Width && y >= 0 && y < canvas.Height)
-                    canvas.SetPixel(x, y, color);
+                    x += sx;
+                    e -= dy;
+                    if(e < 0)
+                    {
+                        y += sy;
+                        e += dx;
+                    }
 
-              
+                    if (x >= 0 && x < offscreen.Width && y >= 0 && y < offscreen.Height)
+                        offscreen.SetPixel(x, y, color);
+
+                }
+            }
+            else
+            {
+                e = dy / 2;
+                for (int i = 0; i < dy; i++)
+                {
+                    y += sy;
+                    e -= dx;
+                    if (e < 0)
+                    {
+                        x += sx;
+                        e += dy;
+                    }
+
+                    if (x >= 0 && x < offscreen.Width && y >= 0 && y < offscreen.Height)
+                        offscreen.SetPixel(x, y, color);
+
+                }
             }
 
+            
+        }
 
-            this.Invalidate();
+        private void clearPath(Button a, Button b)
+        {
+            drawPath(a, b, this.BackColor);
         }
 
     }
