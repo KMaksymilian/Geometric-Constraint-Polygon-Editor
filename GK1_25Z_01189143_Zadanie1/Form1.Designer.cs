@@ -47,7 +47,7 @@
             restartToolStripMenuItem.Name = "restartToolStripMenuItem";
             restartToolStripMenuItem.Size = new Size(55, 20);
             restartToolStripMenuItem.Text = "Restart";
-            restartToolStripMenuItem.Click += restartToolStripMenuItem_Click;
+            restartToolStripMenuItem.Click += restartToolStripMenuItem_Click_1;
             // 
             // Form1
             // 
