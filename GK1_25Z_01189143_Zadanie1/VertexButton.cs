@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace GK1_25Z_01189143_Zadanie1
 {
+    public enum typeOfVertex
+    {
+        Normal,
+        BCtrl
+    }
     internal class VertexButton : Button
     {
+        internal typeOfVertex type;
         public VertexButton(int x, int y)
         {
             Size = new Size(15, 15);
@@ -18,6 +24,7 @@ namespace GK1_25Z_01189143_Zadanie1
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderSize = 0;
             Text = "";
+            type = typeOfVertex.Normal;
 
             GraphicsPath path = new GraphicsPath();
             path.AddEllipse(0, 0, Width, Height);
@@ -25,6 +32,12 @@ namespace GK1_25Z_01189143_Zadanie1
             this.MouseMove += MouseMoveBtn;
             this.MouseDown += MouseDownBtn;
             this.MouseUp += MouseUpBtn;
+        }
+
+        public void changeToCtrl()
+        {
+            type = typeOfVertex.BCtrl;
+            BackColor = Color.Gray;
         }
 
         public Point Center => new Point(Left + Width / 2, Top + Height / 2);
@@ -45,8 +58,6 @@ namespace GK1_25Z_01189143_Zadanie1
                 form.MouseMoveBtn(sender, e);
             }
         }
-
-
 
         private void MouseDownBtn(object? sender, MouseEventArgs e)
         {

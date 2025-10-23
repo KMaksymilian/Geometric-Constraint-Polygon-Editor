@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging.Effects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,14 +105,64 @@ namespace GK1_25Z_01189143_Zadanie1
             edge.DrawLabel(g);
         }
 
-        internal void DrawTo(Graphics grphics)
+        internal void DrawTo(Graphics graphics)
         {
             using (Graphics g = Graphics.FromImage(Canvas))
             {
                 g.DrawImage(Offscreen, 0, 0);
             }
             if (Canvas != null)
-                grphics.DrawImage(Canvas, 0, 0);
+                graphics.DrawImage(Canvas, 0, 0);
+        }
+
+        internal void DrawBezierEdge(Edge edge, Color color)
+        {
+            if (edge.Ctrl1 == null || edge.Ctrl2 == null) throw new Exception();
+            DrawEdge(edge, Color.Gray);
+            DrawEdge(new Edge(edge.A, edge.Ctrl1), Color.LightGray);
+            DrawEdge(new Edge(edge.Ctrl2, edge.B), Color.LightGray);
+            DrawEdge(new Edge(edge.Ctrl1, edge.Ctrl2), Color.LightGray);
+
+            PointF p0 = edge.A.Center;
+            PointF p1 = edge.Ctrl1.Center;
+            PointF p2 = edge.Ctrl2.Center;
+            PointF p3 = edge.B.Center;
+
+            // Rysuj krzywą
+            DrawBezierDeCasteljau(p0, p1, p2, p3, color);
+
+        }
+
+        private void DrawBezierDeCasteljau(PointF p0, PointF p1, PointF p2, PointF p3, Color color)
+        {
+            const int segments = 1000;
+            PointF prev = p0;
+
+            using (var pen = new Pen(color, 2))
+            {
+                for (int i = 1; i <= segments; i++)
+                {
+                    float t = i / (float)segments;
+                    PointF current = CalculateBezierPoint(t, p0, p1, p2, p3);
+                    using Graphics g = Graphics.FromImage(Offscreen);
+                        g.DrawLine(pen, prev, current);
+                    prev = current;
+                }
+            }
+        }
+
+        private PointF CalculateBezierPoint(float t, PointF p0, PointF p1, PointF p2, PointF p3)
+        {
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            float uuu = uu * u;
+            float ttt = tt * t;
+
+            float x = uuu * p0.X + 3 * uu * t * p1.X + 3 * u * tt * p2.X + ttt * p3.X;
+            float y = uuu * p0.Y + 3 * uu * t * p1.Y + 3 * u * tt * p2.Y + ttt * p3.Y;
+
+            return new PointF(x, y);
         }
     }
 }

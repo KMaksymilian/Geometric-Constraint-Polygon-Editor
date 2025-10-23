@@ -109,6 +109,32 @@ namespace GK1_25Z_01189143_Zadanie1
                         Invalidate();
                     });
 
+                    var curveItem = new ToolStripMenuItem("Krzywa (Bézier)");
+                    curveItem.Checked = nearest.Kind == EdgeKind.Bezier;
+                    curveItem.Click += (s, ev) =>
+                    {
+                        if (nearest.Kind == EdgeKind.Line)
+                        {
+                            nearest.Kind = EdgeKind.Bezier;
+                            nearest.MakeBezier(); // twoja metoda ustawiająca kontrolne punkty
+
+                            Controls.Add(nearest.Ctrl1);
+                            Controls.Add(nearest.Ctrl2);
+                        }
+                        else
+                        {
+                            nearest.Kind = EdgeKind.Line;
+
+                            if (nearest.Ctrl1 != null) Controls.Remove(nearest.Ctrl1);
+                            if (nearest.Ctrl2 != null) Controls.Remove(nearest.Ctrl2);
+                        }
+
+                        polygon.RedrawAll();
+                        Invalidate();
+                    };
+
+                    menu.Items.Add(curveItem);
+
                     // Podmenu „Ograniczenia”
                     var advancedItem = new ToolStripMenuItem("Ograniczenia");
 
@@ -136,6 +162,12 @@ namespace GK1_25Z_01189143_Zadanie1
                     advancedItem.DropDownItems.Add(
                         MakeConstraintItem("Pionowa", LineConstraint.Vertical, () =>
                         {
+                            int index = polygon.Edges.IndexOf(nearest);
+                            if (polygon.Edges[(index + 1) % polygon.Edges.Count].Constraint == LineConstraint.Vertical || polygon.Edges[(index - 1 + polygon.Edges.Count) % polygon.Edges.Count].Constraint == LineConstraint.Vertical)
+                            {
+                                MessageBox.Show("Nie można ustawić dwóch sąsiednich odcinków jako pionowe.", "Błąd ograniczenia", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
                             polygon.SetConstraintOnEdge(nearest, LineConstraint.Vertical);
                             Invalidate();
                         })
@@ -226,7 +258,7 @@ namespace GK1_25Z_01189143_Zadanie1
                     isDragging = true;
                     btn.Capture = true;
                 }
-                else if (e.Button == MouseButtons.Right)
+                else if (e.Button == MouseButtons.Right && btn.type != typeOfVertex.BCtrl)
                 {
                     Point snapPoint = new Point(btn.Left + btn.Width / 2, btn.Top + btn.Height / 2);
                     ContextMenuStrip menu = new ContextMenuStrip();

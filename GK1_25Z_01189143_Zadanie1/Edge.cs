@@ -13,11 +13,22 @@ namespace GK1_25Z_01189143_Zadanie1
         Diagonal,
         Const
     }
+
+    public enum EdgeKind
+    {
+        Line,
+        Bezier
+    }
     internal class Edge
     {
         public VertexButton A { get; }
         public VertexButton B { get; }
         public LineConstraint Constraint { get; set; }
+
+        public EdgeKind Kind { get; set; }
+
+        public VertexButton? Ctrl1 { get; set; }
+        public VertexButton? Ctrl2 { get; set; }
 
         public Point MidPoint => new Point(
             (A.Center.X + B.Center.X) / 2,
@@ -32,7 +43,9 @@ namespace GK1_25Z_01189143_Zadanie1
             B = b;
             Constraint = LineConstraint.None;
             Length = Math.Sqrt(Math.Pow(B.Center.X - A.Center.X, 2) + Math.Pow(B.Center.Y - A.Center.Y, 2));
+            Kind = EdgeKind.Line;
         }
+        
 
         
 
@@ -74,6 +87,25 @@ namespace GK1_25Z_01189143_Zadanie1
         internal void SetConstraint(LineConstraint constraint)
         {
             Constraint = constraint;
+        }
+
+        internal (VertexButton,VertexButton) MakeBezier()
+        {
+            Kind = EdgeKind.Bezier;
+
+            Point P0 = A.Center;
+            Point P3 = B.Center;
+
+            int dx = P3.X - P0.X;
+            int dy = P3.Y - P0.Y;
+           
+            if(Ctrl1 != null && Ctrl2 != null)
+                return (Ctrl1, Ctrl2);
+            Ctrl1 = new VertexButton((int)(P0.X + dx / 3), (int)(P0.Y + dy / 3));    
+            Ctrl2 = new VertexButton((int)(P3.X - dx / 3), (int)(P3.Y - dy / 3));
+            Ctrl1.changeToCtrl();
+            Ctrl2.changeToCtrl();
+            return (Ctrl1, Ctrl2);
         }
     }
 }
