@@ -5,6 +5,7 @@ using System.Drawing.Imaging.Effects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace GK1_25Z_01189143_Zadanie1
 {
@@ -51,9 +52,20 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void DrawEdge(Edge edge, Color color)
         {
-
             var (x0, y0) = (edge.A.Center.X, edge.A.Center.Y);
             var (x1, y1) = (edge.B.Center.X, edge.B.Center.Y);
+            Point a = new Point(x0, y0);
+            Point b = new Point(x1, y1);
+            DrawLine(a, b, color);
+            using Graphics g = Graphics.FromImage(Offscreen);
+                edge.DrawLabel(g);  
+        }
+
+        public void DrawLine(Point a, Point b, Color color)
+        {
+
+            var (x0, y0) = (a.X, a.Y);
+            var (x1, y1) = (b.X, b.Y);
             int dx = Math.Abs(x1 - x0), dy = Math.Abs(y1 - y0);
             int sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
 
@@ -99,10 +111,7 @@ namespace GK1_25Z_01189143_Zadanie1
                         Offscreen.SetPixel(x, y, color);
 
                 }
-            }
-
-            using Graphics g = Graphics.FromImage(Offscreen);
-            edge.DrawLabel(g);
+            }          
         }
 
         internal void DrawTo(Graphics graphics)
@@ -122,19 +131,13 @@ namespace GK1_25Z_01189143_Zadanie1
             DrawEdge(new Edge(edge.A, edge.Ctrl1), Color.LightGray);
             DrawEdge(new Edge(edge.Ctrl2, edge.B), Color.LightGray);
             DrawEdge(new Edge(edge.Ctrl1, edge.Ctrl2), Color.LightGray);
+            
 
             PointF p0 = edge.A.Center;
             PointF p1 = edge.Ctrl1.Center;
             PointF p2 = edge.Ctrl2.Center;
             PointF p3 = edge.B.Center;
 
-            // Rysuj krzywą
-            DrawBezierDeCasteljau(p0, p1, p2, p3, color);
-
-        }
-
-        private void DrawBezierDeCasteljau(PointF p0, PointF p1, PointF p2, PointF p3, Color color)
-        {
             const int segments = 1000;
             PointF prev = p0;
 
@@ -144,11 +147,19 @@ namespace GK1_25Z_01189143_Zadanie1
                 {
                     float t = i / (float)segments;
                     PointF current = CalculateBezierPoint(t, p0, p1, p2, p3);
-                    using Graphics g = Graphics.FromImage(Offscreen);
-                        g.DrawLine(pen, prev, current);
+                    DrawLine(new Point((int)prev.X, (int)prev.Y), new Point((int)current.X, (int)current.Y), color);
                     prev = current;
                 }
             }
+
+            using (Graphics g = Graphics.FromImage(Offscreen))
+            {
+                
+                DrawContinuityLabel(g, edge.A.Center, edge.A.continuity);
+                DrawContinuityLabel(g, edge.B.Center, edge.B.continuity);
+            }
+                
+
         }
 
         private PointF CalculateBezierPoint(float t, PointF p0, PointF p1, PointF p2, PointF p3)
@@ -163,6 +174,25 @@ namespace GK1_25Z_01189143_Zadanie1
             float y = uuu * p0.Y + 3 * uu * t * p1.Y + 3 * u * tt * p2.Y + ttt * p3.Y;
 
             return new PointF(x, y);
+        }
+
+        private void DrawContinuityLabel(Graphics g, PointF pos, typeOfContinuity cont)
+        {
+          
+            string text = cont.ToString(); // "G0", "G1", "C1"
+            using Font font = new Font("Segoe UI", 9, FontStyle.Bold);
+            SizeF size = g.MeasureString(text, font);
+
+            RectangleF box = new RectangleF(
+                pos.X - size.Width / 2 - 4,
+                pos.Y - 25 - size.Height / 2, // nad punktem
+                size.Width + 8,
+                size.Height + 4
+            );
+
+            g.FillRectangle(Brushes.White, box);
+            g.DrawRectangle(Pens.Black, Rectangle.Round(box));
+            g.DrawString(text, font, Brushes.Black, box.X + 4, box.Y + 2);
         }
     }
 }

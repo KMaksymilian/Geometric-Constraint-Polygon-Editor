@@ -12,9 +12,17 @@ namespace GK1_25Z_01189143_Zadanie1
         Normal,
         BCtrl
     }
+
+    public enum typeOfContinuity
+    {
+        G0,
+        G1,
+        C1
+    }
     internal class VertexButton : Button
     {
         internal typeOfVertex type;
+        internal typeOfContinuity continuity;
         public VertexButton(int x, int y)
         {
             Size = new Size(15, 15);
@@ -25,6 +33,7 @@ namespace GK1_25Z_01189143_Zadanie1
             FlatAppearance.BorderSize = 0;
             Text = "";
             type = typeOfVertex.Normal;
+            continuity = typeOfContinuity.C1;
 
             GraphicsPath path = new GraphicsPath();
             path.AddEllipse(0, 0, Width, Height);

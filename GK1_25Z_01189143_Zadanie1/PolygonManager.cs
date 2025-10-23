@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
@@ -138,14 +139,105 @@ namespace GK1_25Z_01189143_Zadanie1
 
         internal void MoveVertex(VertexButton selectedVertexButton, Point cursor)
         { 
+            
             selectedVertexButton.Left = cursor.X - selectedVertexButton.Width / 2;
             selectedVertexButton.Top = cursor.Y - selectedVertexButton.Height / 2;
-            if(selectedVertexButton.type == typeOfVertex.Normal)
-            {
-                int index = Vertices.IndexOf(selectedVertexButton);
-                ApplyConstraint(index);
-            }
+            int index = selectedVertexButton.type == typeOfVertex.BCtrl ?
+             ApplyConsitentyOnNormalPoint(selectedVertexButton) :
+             Vertices.IndexOf(selectedVertexButton);           
+            ApplyConstraint(index);
+            foreach (var edge in Edges.Where(e => e.Kind == EdgeKind.Bezier)) ApplyConsitentyCtrlPoint(edge);
             RedrawAll();
+        }
+
+        private int ApplyConsitentyOnNormalPoint(VertexButton selectedVertexButton)
+        {
+            Edge e = Edges.First(edge => edge.Ctrl1 == selectedVertexButton || edge.Ctrl2 == selectedVertexButton);
+            VertexButton normalPoint = e.Ctrl1 == selectedVertexButton ? e.A : e.B;
+            Edge nearEdge = Edges.First(edge => edge.A == normalPoint || edge.B == normalPoint && edge != e);
+            VertexButton otherP = nearEdge.A == normalPoint ? nearEdge.B : nearEdge.A;
+
+            if (normalPoint.continuity == typeOfContinuity.G1 && nearEdge.Kind == EdgeKind.Line)
+            {
+                
+                if(nearEdge.Constraint == LineConstraint.Vertical)
+                {
+                    normalPoint.Left = selectedVertexButton.Left;
+                }
+                else if(nearEdge.Constraint == LineConstraint.Diagonal)
+                {
+                    int dx = selectedVertexButton.Center.X - normalPoint.Center.X;
+                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
+                    int sy = Math.Sign(dy);
+                    normalPoint.Top = selectedVertexButton.Center.Y + sy * Math.Abs(dx) - normalPoint.Height / 2;
+                }
+                else
+                {
+                    int dx = selectedVertexButton.Left - normalPoint.Left;
+                    int dy = selectedVertexButton.Top - normalPoint.Top;
+                    int dxR = normalPoint.Center.X - otherP.Center.X;
+                    int dyR = normalPoint.Center.Y - otherP.Center.Y;
+                    double lengthCtrl  = Math.Sqrt(dy * dy + dx * dx);
+                    double lenghtR = Math.Sqrt(dyR * dyR + dxR * dxR);
+
+                    double scale = lenghtR / lengthCtrl;
+                    double newX = normalPoint.Left - dx * scale;
+                    double newY = normalPoint.Top - dy * scale;
+
+                    otherP.Left = (int)Math.Round(newX);
+                    otherP.Top = (int)Math.Round(newY);
+                }
+
+
+            }
+            else if (normalPoint.continuity == typeOfContinuity.C1)
+            {
+                if (nearEdge.Constraint == LineConstraint.Vertical)
+                {
+                    normalPoint.Left = selectedVertexButton.Left;
+                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
+                    otherP.Left = normalPoint.Left;
+                    otherP.Top = normalPoint.Center.Y - 3*dy - otherP.Height / 2;
+                   
+                }
+                else if (nearEdge.Constraint == LineConstraint.Diagonal)
+                {
+                    int dx = selectedVertexButton.Center.X - normalPoint.Center.X;
+                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
+                    int sy = Math.Sign(dy);
+                    normalPoint.Top = selectedVertexButton.Center.Y + sy * Math.Abs(dx) - normalPoint.Height / 2;
+                    otherP.Left = normalPoint.Center.X - 3 * sy * Math.Abs(dx) - otherP.Width / 2;
+                    otherP.Top = normalPoint.Center.Y - 3 * sy * Math.Abs(dx) - otherP.Height / 2;
+                }
+                else
+                {
+                    int dx = selectedVertexButton.Left - normalPoint.Left;
+                    int dy = selectedVertexButton.Top - normalPoint.Top;
+                    
+                    
+                    double newX = normalPoint.Left - 3 * dx;
+                    double newY = normalPoint.Top - 3 * dy;
+
+                    otherP.Left = (int)Math.Round(newX);
+                    otherP.Top = (int)Math.Round(newY);
+
+                }
+            }
+
+            return Vertices.IndexOf(normalPoint);
+        }
+
+        private void ApplyConsitentyCtrlPoint(Edge edge)
+        {
+            if (edge.A.continuity == typeOfContinuity.G1 || edge.A.continuity == typeOfContinuity.C1)
+            {
+                Edge nearEdge = Edges.First(e => e.A == edge.A || e.B == edge.A && e != edge);
+                VertexButton otherP = nearEdge.A == edge.A ? nearEdge.B : nearEdge.A;
+                int dx = edge.A.Left - otherP.Left;
+                int dy = edge.A.Top - otherP.Top;
+                double lengthR = Math.Sqrt(dy * dy + dx * dx);
+
+            }
         }
 
         private void ApplyConstraint(int startIndex)
@@ -378,6 +470,14 @@ namespace GK1_25Z_01189143_Zadanie1
             nearest.SetConstraint(constraint);
             ApplyConstraint(Edges.IndexOf(nearest));
             RedrawAll();
+        }
+
+        internal void SetContinuity(VertexButton btn, typeOfContinuity continuity)
+        {
+            btn.continuity = continuity;
+            if(Edges.Any(e => e.A == btn || e.B == btn))
+                   RedrawAll();
+            if (Edges.Any(e => e.Kind == EdgeKind.Bezier && (e.A == btn || e.B == btn))) RedrawAll();
         }
 
         //private void ApplyFinalCstraint(VertexButton firstMovedV, VertexButton middleV, VertexButton prevV)

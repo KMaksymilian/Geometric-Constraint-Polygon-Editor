@@ -263,6 +263,43 @@ namespace GK1_25Z_01189143_Zadanie1
                     Point snapPoint = new Point(btn.Left + btn.Width / 2, btn.Top + btn.Height / 2);
                     ContextMenuStrip menu = new ContextMenuStrip();
                     menu.Items.Add("Usuń wierzchoek", null, (s, ev) => { polygon.RemoveVertex(btn); btn.Dispose(); Invalidate(); });
+                   
+                    var advancedItem = new ToolStripMenuItem("Ciągłości");
+
+                    ToolStripMenuItem MakeContinuityItem(string text, typeOfContinuity continuity, Action onClick)
+                    {
+                        var item = new ToolStripMenuItem(text)
+                        {
+                            Checked = btn.continuity == continuity
+                        };
+                        item.Click += (s, ev) => onClick();
+                        return item;
+                    }
+
+                    advancedItem.DropDownItems.Add(
+                        MakeContinuityItem("G0", typeOfContinuity.G0, () =>
+                        {
+                            polygon.SetContinuity(btn, typeOfContinuity.G0);
+                            Invalidate();
+                        })
+                    );
+
+                    advancedItem.DropDownItems.Add(
+                        MakeContinuityItem("G1", typeOfContinuity.G1, () =>
+                        {
+                            polygon.SetContinuity(btn, typeOfContinuity.G1);
+                            Invalidate();
+                        })
+                    );
+
+                    advancedItem.DropDownItems.Add(
+                        MakeContinuityItem("C1", typeOfContinuity.C1, () =>
+                        {
+                            polygon.SetContinuity(btn, typeOfContinuity.C1);
+                            Invalidate();
+                        })
+                    );
+                    menu.Items.Add(advancedItem);
                     menu.Show(this, snapPoint);
                 }
             }
