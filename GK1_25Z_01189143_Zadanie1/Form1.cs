@@ -263,7 +263,7 @@ namespace GK1_25Z_01189143_Zadanie1
                     Point snapPoint = new Point(btn.Left + btn.Width / 2, btn.Top + btn.Height / 2);
                     ContextMenuStrip menu = new ContextMenuStrip();
                     menu.Items.Add("Usuń wierzchoek", null, (s, ev) => { polygon.RemoveVertex(btn); btn.Dispose(); Invalidate(); });
-                   
+
                     var advancedItem = new ToolStripMenuItem("Ciągłości");
 
                     ToolStripMenuItem MakeContinuityItem(string text, typeOfContinuity continuity, Action onClick)
@@ -317,6 +317,31 @@ namespace GK1_25Z_01189143_Zadanie1
             polygon.Dispose();
             canvas.Clear();
             SetupPolygon();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lib_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lib.Checked)
+            {
+                canvas.useLibDrawing = true;
+                polygon.RedrawAll();
+                Invalidate();
+            }
+        }
+
+        private void self_CheckedChanged(object sender, EventArgs e)
+        {
+            if (self.Checked)
+            {
+                canvas.useLibDrawing = false;
+                polygon.RedrawAll();
+                Invalidate();
+            }
         }
 
         //private void MakeSetup()

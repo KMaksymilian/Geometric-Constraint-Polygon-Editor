@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj": {}
+    "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj": {
+    "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj",
         "projectName": "GK1_25Z_01189143_Zadanie1",
-        "projectPath": "C:\\Users\\Lenovo\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj",
-        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -45,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0-windows7.0": {
@@ -69,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

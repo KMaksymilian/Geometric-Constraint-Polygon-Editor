@@ -14,6 +14,7 @@ namespace GK1_25Z_01189143_Zadanie1
         public Bitmap Canvas { get; private set; }
         public Bitmap Offscreen { get; private set; }
         private readonly Color background;
+        public bool useLibDrawing = true;
 
         public CanvasManager(int width, int height, Color bg)
         {
@@ -56,8 +57,13 @@ namespace GK1_25Z_01189143_Zadanie1
             var (x1, y1) = (edge.B.Center.X, edge.B.Center.Y);
             Point a = new Point(x0, y0);
             Point b = new Point(x1, y1);
-            DrawLine(a, b, color);
             using Graphics g = Graphics.FromImage(Offscreen);
+            if (useLibDrawing)
+            {
+                using Pen pen = new Pen(color, 1);
+                g.DrawLine(pen, a, b);
+            }
+            else DrawLine(a, b, color);
                 edge.DrawLabel(g);  
         }
 

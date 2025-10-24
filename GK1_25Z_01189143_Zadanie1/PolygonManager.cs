@@ -70,15 +70,47 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void RemoveVertex(VertexButton v)
         {
-            int index = Vertices.IndexOf(v);
-            if (index < 0) return;
+            Vertices.Remove(v);
+            Edge prev = Edges.First(e => e.B == v);
+            Edge next = Edges.First(e => e.A == v);
+            Edges.Insert(Edges.IndexOf(prev), new Edge(prev.A, next.B));
+            
 
-            Vertices.RemoveAt(index);
-            Edges.Clear();
-
-            for (int i = 0; i < Vertices.Count; i++)
-                Edges.Add(new Edge(Vertices[i], Vertices[(i + 1) % Vertices.Count]));
-
+            if (prev.Kind == EdgeKind.Bezier)
+            {
+                if (prev.Ctrl1 != null && prev.Ctrl1.Parent != null)
+                {
+                    prev.Ctrl1.Parent.Controls.Remove(prev.Ctrl1);
+                    Vertices.Remove(prev.Ctrl1);
+                    prev.Ctrl1.Dispose();
+                }
+                if (prev.Ctrl2 != null && prev.Ctrl2.Parent != null)
+                {
+                    prev.Ctrl2.Parent.Controls.Remove(prev.Ctrl2);
+                    Vertices.Remove(prev.Ctrl2);
+                    prev.Ctrl2.Dispose();
+                }
+            }
+            if (next.Kind == EdgeKind.Bezier)
+            {
+                if (next.Ctrl1 != null && next.Ctrl1.Parent != null)
+                {
+                    next.Ctrl1.Parent.Controls.Remove(next.Ctrl1);
+                    Vertices.Remove(next.Ctrl1);
+                    next.Ctrl1.Dispose();
+                }
+                if (next.Ctrl2 != null && next.Ctrl2.Parent != null)
+                {
+                    next.Ctrl2.Parent.Controls.Remove(next.Ctrl2);
+                    Vertices.Remove(next.Ctrl2);
+                    next.Ctrl2.Dispose();
+                }
+            }
+            if(v.Parent != null)
+                v.Parent.Controls.Remove(v);
+            Edges.Remove(prev);
+            Edges.Remove(next);
+            v.Dispose();
             RedrawAll();
         }
 
@@ -154,91 +186,127 @@ namespace GK1_25Z_01189143_Zadanie1
         {
             Edge e = Edges.First(edge => edge.Ctrl1 == selectedVertexButton || edge.Ctrl2 == selectedVertexButton);
             VertexButton normalPoint = e.Ctrl1 == selectedVertexButton ? e.A : e.B;
-            Edge nearEdge = Edges.First(edge => edge.A == normalPoint || edge.B == normalPoint && edge != e);
+
+            Edge? nearEdge = Edges.FirstOrDefault(edge => (edge.A == normalPoint || edge.B == normalPoint) && edge != e);
+            if (nearEdge == null) return -1;
+
             VertexButton otherP = nearEdge.A == normalPoint ? nearEdge.B : nearEdge.A;
 
-            if (normalPoint.continuity == typeOfContinuity.G1 && nearEdge.Kind == EdgeKind.Line)
+            int dx = selectedVertexButton.Center.X - normalPoint.Center.X;
+            int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
+            double lengthCtrl = Math.Sqrt(dx * dx + dy * dy);
+            if (lengthCtrl < 1e-6) return Vertices.IndexOf(normalPoint);
+
+            if (normalPoint.continuity == typeOfContinuity.G1)
             {
-                
-                if(nearEdge.Constraint == LineConstraint.Vertical)
-                {
-                    normalPoint.Left = selectedVertexButton.Left;
-                }
-                else if(nearEdge.Constraint == LineConstraint.Diagonal)
-                {
-                    int dx = selectedVertexButton.Center.X - normalPoint.Center.X;
-                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
-                    int sy = Math.Sign(dy);
-                    normalPoint.Top = selectedVertexButton.Center.Y + sy * Math.Abs(dx) - normalPoint.Height / 2;
-                }
-                else
-                {
-                    int dx = selectedVertexButton.Left - normalPoint.Left;
-                    int dy = selectedVertexButton.Top - normalPoint.Top;
-                    int dxR = normalPoint.Center.X - otherP.Center.X;
-                    int dyR = normalPoint.Center.Y - otherP.Center.Y;
-                    double lengthCtrl  = Math.Sqrt(dy * dy + dx * dx);
-                    double lenghtR = Math.Sqrt(dyR * dyR + dxR * dxR);
+                // G1 — zachowujemy kierunek
+                int dxR = normalPoint.Center.X - otherP.Center.X;
+                int dyR = normalPoint.Center.Y - otherP.Center.Y;
+                double lengthR = Math.Sqrt(dxR * dxR + dyR * dyR);
 
-                    double scale = lenghtR / lengthCtrl;
-                    double newX = normalPoint.Left - dx * scale;
-                    double newY = normalPoint.Top - dy * scale;
+                double scale = lengthR / lengthCtrl;
+                double newX = normalPoint.Center.X - dx * scale;
+                double newY = normalPoint.Center.Y - dy * scale;
 
-                    otherP.Left = (int)Math.Round(newX);
-                    otherP.Top = (int)Math.Round(newY);
-                }
-
-
+                otherP.Left = (int)Math.Round(newX) - otherP.Width / 2;
+                otherP.Top = (int)Math.Round(newY) - otherP.Height / 2;
             }
             else if (normalPoint.continuity == typeOfContinuity.C1)
             {
-                if (nearEdge.Constraint == LineConstraint.Vertical)
-                {
-                    normalPoint.Left = selectedVertexButton.Left;
-                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
-                    otherP.Left = normalPoint.Left;
-                    otherP.Top = normalPoint.Center.Y - 3*dy - otherP.Height / 2;
-                   
-                }
-                else if (nearEdge.Constraint == LineConstraint.Diagonal)
-                {
-                    int dx = selectedVertexButton.Center.X - normalPoint.Center.X;
-                    int dy = selectedVertexButton.Center.Y - normalPoint.Center.Y;
-                    int sy = Math.Sign(dy);
-                    normalPoint.Top = selectedVertexButton.Center.Y + sy * Math.Abs(dx) - normalPoint.Height / 2;
-                    otherP.Left = normalPoint.Center.X - 3 * sy * Math.Abs(dx) - otherP.Width / 2;
-                    otherP.Top = normalPoint.Center.Y - 3 * sy * Math.Abs(dx) - otherP.Height / 2;
-                }
-                else
-                {
-                    int dx = selectedVertexButton.Left - normalPoint.Left;
-                    int dy = selectedVertexButton.Top - normalPoint.Top;
-                    
-                    
-                    double newX = normalPoint.Left - 3 * dx;
-                    double newY = normalPoint.Top - 3 * dy;
+                // C1 — zachowujemy kierunek + 3x długość
+                double newX = normalPoint.Center.X - 3 * dx;
+                double newY = normalPoint.Center.Y - 3 * dy;
 
-                    otherP.Left = (int)Math.Round(newX);
-                    otherP.Top = (int)Math.Round(newY);
-
-                }
+                otherP.Left = (int)Math.Round(newX) - otherP.Width / 2;
+                otherP.Top = (int)Math.Round(newY) - otherP.Height / 2;
             }
 
             return Vertices.IndexOf(normalPoint);
         }
 
+
         private void ApplyConsitentyCtrlPoint(Edge edge)
         {
+            // ----------- LEWA STRONA (punkt A) -----------
             if (edge.A.continuity == typeOfContinuity.G1 || edge.A.continuity == typeOfContinuity.C1)
             {
-                Edge nearEdge = Edges.First(e => e.A == edge.A || e.B == edge.A && e != edge);
-                VertexButton otherP = nearEdge.A == edge.A ? nearEdge.B : nearEdge.A;
-                int dx = edge.A.Left - otherP.Left;
-                int dy = edge.A.Top - otherP.Top;
-                double lengthR = Math.Sqrt(dy * dy + dx * dx);
+                if (edge.Ctrl1 == null) return;
 
+                Edge? nearEdgeA = Edges.FirstOrDefault(e => (e.A == edge.A || e.B == edge.A) && e != edge);
+                if (nearEdgeA != null)
+                {
+                    VertexButton refPoint;
+                    if (nearEdgeA.Kind == EdgeKind.Line)
+                        refPoint = nearEdgeA.A == edge.A ? nearEdgeA.B : nearEdgeA.A;
+                    else if (nearEdgeA.Ctrl2 != null)
+                        refPoint = nearEdgeA.Ctrl2;
+                    else
+                        return;
+
+                    int dxR = edge.A.Center.X - refPoint.Center.X;
+                    int dyR = edge.A.Center.Y - refPoint.Center.Y;
+
+                    double newX, newY;
+                    if (edge.A.continuity == typeOfContinuity.G1)
+                    {
+                        double lengthR = Math.Sqrt(dxR * dxR + dyR * dyR);
+                        double scale = 60.0 / (lengthR == 0 ? 1 : lengthR);
+                        newX = edge.A.Center.X + dxR * scale;
+                        newY = edge.A.Center.Y + dyR * scale;
+                    }
+                    else
+                    {
+                        // C1 – 1/3 długości w kierunku stycznej
+                        newX = edge.A.Center.X + dxR / 3.0;
+                        newY = edge.A.Center.Y + dyR / 3.0;
+                    }
+
+                    edge.Ctrl1.Left = (int)Math.Round(newX) - edge.Ctrl1.Width / 2;
+                    edge.Ctrl1.Top = (int)Math.Round(newY) - edge.Ctrl1.Height / 2;
+                }
+            }
+
+            // ----------- PRAWA STRONA (punkt B) -----------
+            if (edge.B.continuity == typeOfContinuity.G1 || edge.B.continuity == typeOfContinuity.C1)
+            {
+                if (edge.Ctrl2 == null) return;
+
+                Edge? nearEdgeB = Edges.FirstOrDefault(e => (e.A == edge.B || e.B == edge.B) && e != edge);
+                if (nearEdgeB != null)
+                {
+                    VertexButton refPoint;
+                    if (nearEdgeB.Kind == EdgeKind.Line)
+                        refPoint = nearEdgeB.A == edge.B ? nearEdgeB.B : nearEdgeB.A;
+                    else if (nearEdgeB.Ctrl1 != null)
+                        refPoint = nearEdgeB.Ctrl1;
+                    else
+                        return;
+
+                    int dxR = edge.B.Center.X - refPoint.Center.X;
+                    int dyR = edge.B.Center.Y - refPoint.Center.Y;
+
+                    double newX, newY;
+                    if (edge.B.continuity == typeOfContinuity.G1)
+                    {
+                        double lengthR = Math.Sqrt(dxR * dxR + dyR * dyR);
+                        double scale = 60.0 / (lengthR == 0 ? 1 : lengthR);
+                        newX = edge.B.Center.X + dxR * scale;
+                        newY = edge.B.Center.Y + dyR * scale;
+                    }
+                    else
+                    {
+                        // C1 – 1/3 długości w kierunku stycznej
+                        newX = edge.B.Center.X + dxR / 3.0;
+                        newY = edge.B.Center.Y + dyR / 3.0;
+                    }
+
+                    edge.Ctrl2.Left = (int)Math.Round(newX) - edge.Ctrl2.Width / 2;
+                    edge.Ctrl2.Top = (int)Math.Round(newY) - edge.Ctrl2.Height / 2;
+                }
             }
         }
+
+
 
         private void ApplyConstraint(int startIndex)
         {
