@@ -1,65 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GK1_25Z_01189143_Zadanie1
 {
-    public enum LineConstraint
+    interface IObserver
     {
-        None,
-        Vertical,
-        Diagonal,
-        Const
+        void Update(Vertex x);
     }
 
-    public enum EdgeKind
+    public enum TypeOfEdge
     {
         Line,
         Bezier
     }
-    internal class Edge
+    internal class Edge : IObserver
     {
-        public VertexButton A { get; }
-        public VertexButton B { get; }
-        public LineConstraint Constraint { get; set; }
+        private int _lengthConstraint;
+        public Vertex A { get; }
+        public Vertex B { get; }
+        public IConstraintVisitable ConstraintStrategy { get; set; } = new NoneConstraint();
+        public TypeOfEdge Type { get; set; }
+        public Vertex? Ctrl1 { get; set; }
+        public Vertex? Ctrl2 { get; set; }
+        public int LengthConstraint
+        {
+            get => _lengthConstraint;
+            internal set
+            {
+                if (value <= 0)
+                {
+                    MessageBox.Show(
+                        "Długość musi być większa od zera.",
+                        "Błąd wartości",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return;
+                }
 
-        public EdgeKind Kind { get; set; }
-
-        public VertexButton? Ctrl1 { get; set; }
-        public VertexButton? Ctrl2 { get; set; }
-
-        public Point MidPoint => new Point(
-            (A.Center.X + B.Center.X) / 2,
-            (A.Center.Y + B.Center.Y) / 2
-        );
-
-        public double Length { get; internal set; }
-
-        public Edge(VertexButton a, VertexButton b)
+                _lengthConstraint = value;
+            }
+        }
+        internal Vertex OtherVertex(Vertex x) => x == A ? B : A;
+        internal void SetConstraint(IConstraintVisitable constraint)
+        {
+            ConstraintStrategy = constraint;
+            ConstraintStrategy.ApplyFirstTime(this);
+        }
+        public Edge(Vertex a, Vertex b)
         {
             A = a;
             B = b;
-            Constraint = LineConstraint.None;
-            Length = Math.Sqrt(Math.Pow(B.Center.X - A.Center.X, 2) + Math.Pow(B.Center.Y - A.Center.Y, 2));
-            Kind = EdgeKind.Line;
+            A.AddObserver(this);
+            B.AddObserver(this);
+            LengthConstraint = (int)Math.Sqrt(Math.Pow(B.Position.X - A.Position.X, 2) + Math.Pow(B.Position.Y - A.Position.Y, 2));
+            Type = TypeOfEdge.Line;
         }
-        
 
-        
+        public Point MidPoint => new Point(
+            (A.Position.X + B.Position.X) / 2,
+            (A.Position.Y + B.Position.Y) / 2
+        );
 
         public void DrawLabel(Graphics g)
         {
-            if (Constraint == LineConstraint.None) return;
-
-            string label = Constraint switch
-            {
-                LineConstraint.Vertical => "V",
-                LineConstraint.Diagonal => "D",
-                LineConstraint.Const => $"{Length}",
-                _ => ""
-            };
+            string label = ConstraintStrategy.GetName(this);
+            if (label == "None") return;
 
             using Font font = new Font("Segoe UI", 9, FontStyle.Bold);
             SizeF textSize = g.MeasureString(label, font);
@@ -74,38 +84,52 @@ namespace GK1_25Z_01189143_Zadanie1
             g.FillRectangle(Brushes.White, box);
             g.DrawRectangle(Pens.Black, box);
             g.DrawString(label, font, Brushes.Black, MidPoint.X - textSize.Width / 2, MidPoint.Y - textSize.Height / 2);
-
-            //Length = Math.Sqrt(Math.Pow(B.Center.X - A.Center.X, 2) + Math.Pow(B.Center.Y - A.Center.Y, 2));
         }
 
-        public double CalculateLength()
+
+        internal void MakeBezier()
         {
-            int dx = B.Center.X - A.Center.X;
-            int dy = B.Center.Y - A.Center.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
+            Type = TypeOfEdge.Bezier;
+
+            Point a = A.Position;
+            Point b = B.Position;
+
+            int dx = b.X - a.X;
+            int dy = b.Y - a.Y;
+
+            if (Ctrl1 != null && Ctrl2 != null) return;
+
+            Ctrl1 = new Vertex((int)(a.X + dx / 3), (int)(a.Y + dy / 3));    
+            Ctrl2 = new Vertex((int)(b.X - dx / 3), (int)(b.Y - dy / 3));
+            Ctrl1.ChangeToCtrl();
+            Ctrl2.ChangeToCtrl();
+            ApplyContinuity();
+            return;
         }
-        internal void SetConstraint(LineConstraint constraint)
+
+        internal void ApplyContinuity()
         {
-            Constraint = constraint;
+            if (Ctrl1 != null) ApplyVertexContinuity(A, Ctrl1, true);
+            if (Ctrl2 != null) ApplyVertexContinuity(B, Ctrl2, false);
         }
 
-        internal (VertexButton,VertexButton) MakeBezier()
+        private void ApplyVertexContinuity(Vertex vertex, Vertex ctrl, bool isStart)
         {
-            Kind = EdgeKind.Bezier;
-
-            Point P0 = A.Center;
-            Point P3 = B.Center;
-
-            int dx = P3.X - P0.X;
-            int dy = P3.Y - P0.Y;
-           
-            if(Ctrl1 != null && Ctrl2 != null)
-                return (Ctrl1, Ctrl2);
-            Ctrl1 = new VertexButton((int)(P0.X + dx / 3), (int)(P0.Y + dy / 3));    
-            Ctrl2 = new VertexButton((int)(P3.X - dx / 3), (int)(P3.Y - dy / 3));
-            Ctrl1.changeToCtrl();
-            Ctrl2.changeToCtrl();
-            return (Ctrl1, Ctrl2);
+            var visitor = new ContinuityApplierVisitorVertexMoved();
+            vertex.ContinuityStrategy.Accept(visitor, this, vertex, ctrl, isStart);
         }
+        internal void ApplyContinuityCtrlMoved(Vertex vertex, Vertex ctrl, bool isStart)
+        {
+            var visitor = new ContinuityApplierVisitorCtrlMoved();
+            vertex.ContinuityStrategy.Accept(visitor, this, vertex, ctrl, isStart);
+        }
+
+        public void Update(Vertex movedVertex)
+        {
+            var visitor = new ConstraintApplierVisitor();
+            ConstraintStrategy.Accept(visitor, this, movedVertex);
+        }
+
+        
     }
 }

@@ -7,74 +7,33 @@ using System.Threading.Tasks;
 
 namespace GK1_25Z_01189143_Zadanie1
 {
-    public enum typeOfVertex
+    public enum TypeOfVertex
     {
         Normal,
         BCtrl
     }
 
-    public enum typeOfContinuity
+    internal class Vertex
     {
-        G0,
-        G1,
-        C1
-    }
-    internal class VertexButton : Button
-    {
-        internal typeOfVertex type;
-        internal typeOfContinuity continuity;
-        public VertexButton(int x, int y)
+        public readonly List<IObserver> Observers = new();
+        internal TypeOfVertex Type { get;  set; } = TypeOfVertex.Normal;
+        public IContinuityVisitable ContinuityStrategy { get; set; } = new ContinuityC1();
+        internal Point Position { get; private set; }
+        internal bool Moved { get; set; } = false;
+        public Vertex(int x, int y) => Position = new Point(x, y);
+        public void MoveToWithoutNotify(int dx, int dy) => Position = new Point(Position.X + dx, Position.Y + dy);
+        internal void MoveToWithoutNotify(Point point) => Position = point;
+        private void NotifyObservers() => Observers.ForEach(o => o.Update(this));
+        public void ChangeToCtrl() => Type = TypeOfVertex.BCtrl;
+        public void AddObserver(IObserver observer) => Observers.Add(observer);
+
+        public void MoveTo(Point newPos)
         {
-            Size = new Size(15, 15);
-            Left = x - Width / 2;
-            Top = y - Height / 2;
-            BackColor = Color.Black;
-            FlatStyle = FlatStyle.Flat;
-            FlatAppearance.BorderSize = 0;
-            Text = "";
-            type = typeOfVertex.Normal;
-            continuity = typeOfContinuity.C1;
-
-            GraphicsPath path = new GraphicsPath();
-            path.AddEllipse(0, 0, Width, Height);
-            Region = new Region(path);
-            this.MouseMove += MouseMoveBtn;
-            this.MouseDown += MouseDownBtn;
-            this.MouseUp += MouseUpBtn;
+            if (!Moved) return;
+            Position = newPos;
+            Moved = true;
+            NotifyObservers();
         }
-
-        public void changeToCtrl()
-        {
-            type = typeOfVertex.BCtrl;
-            BackColor = Color.Gray;
-        }
-
-        public Point Center => new Point(Left + Width / 2, Top + Height / 2);
-
-
-        private void MouseUpBtn(object? sender, MouseEventArgs e)
-        {
-            if(Parent is Form1 form)
-            {
-                form.MouseUpBtn(sender, e);
-            }
-        }
-
-        private void MouseMoveBtn(object? sender, MouseEventArgs e)
-        {
-            if (Parent is Form1 form)
-            {
-                form.MouseMoveBtn(sender, e);
-            }
-        }
-
-        private void MouseDownBtn(object? sender, MouseEventArgs e)
-        {
-            if (Parent is Form1 form)
-            {
-                form.MouseDownBtn(sender, e);
-            }
-
-        }
+       
     }
 }

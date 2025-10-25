@@ -15,7 +15,7 @@ namespace GK1_25Z_01189143_Zadanie1
         Point lastMousePos;
 
         bool isDragging = false;
-        VertexButton? selectedVertexButton = null;
+        Vertex? selectedVertexButton = null;
         public Form1()
         {
             InitializeComponent();
@@ -41,11 +41,9 @@ namespace GK1_25Z_01189143_Zadanie1
 
             foreach (var p in positions)
             {
-                var v = new VertexButton(p.X, p.Y);
+                var v = new Vertex(p.X, p.Y);
                 polygon.AddVertex(v);
-                Controls.Add(v);
             }
-
             polygon.RedrawAll();
             Invalidate();
         }
@@ -309,19 +307,9 @@ namespace GK1_25Z_01189143_Zadanie1
 
         private void restartToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            foreach (var btn in polygon.Vertices)
-            {
-                this.Controls.Remove(btn);
-                btn.Dispose();
-            }
             polygon.Dispose();
             canvas.Clear();
             SetupPolygon();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void lib_CheckedChanged(object sender, EventArgs e)
@@ -343,62 +331,6 @@ namespace GK1_25Z_01189143_Zadanie1
                 Invalidate();
             }
         }
-
-        //private void MakeSetup()
-        //{
-        //    int height = this.ClientSize.Height;
-        //    int width = this.ClientSize.Width;
-
-        //    var positions = new List<(int y, int x)>
-        //    {
-        //        (height/3, width/3),
-        //        (height/3, 2*width/3),
-        //        (2*height/3, width/2)
-        //    };
-
-
-        //    foreach (var (y, x) in positions)
-        //        MakeButton(y, x);
-
-
-        //    buttons = this.Controls.OfType<Button>().ToList();
-
-
-
-        //    for (int i = 0; i < buttons.Count; i++)
-        //    {
-        //        var start = buttons[i];
-        //        var end = buttons[(i + 1) % buttons.Count];
-        //        lineTypes.Add(LineType.None);
-        //        drawPath(start, end, Color.Red);
-        //    }
-
-        //    using (Graphics g = Graphics.FromImage(canvas))
-        //        g.DrawImage(offscreen, 0, 0);
-        //    Invalidate();
-
-        //}
-
-        //private void MoveButton(Button b, Point snapPoint, Button? sender)
-        //{
-        //    Button prev = buttons[(buttons.IndexOf(b) - 1 + buttons.Count) % buttons.Count];
-        //    Button next = buttons[(buttons.IndexOf(b) + 1) % buttons.Count];
-
-        //    if (sender == null)
-        //    {
-        //        clearPath(prev, b);
-        //        clearPath(b, next);
-
-        //        if (lineTypes[buttons.IndexOf(b)] == LineType.Vertical)
-        //        {
-        //            MoveButton(next, new Point(snapPoint.X, next.Top + next.Height / 2), b);
-        //        }
-        //        else if (lineTypes[buttons.IndexOf(b)] == LineType.Diagonal || lineTypes[buttons.IndexOf(b)] == LineType.Const)
-        //        {
-        //            MoveButton(next, new Point(snapPoint.X + (next.Left + next.Width / 2 - b.Left - b.Width / 2), snapPoint.Y + (next.Top + next.Height / 2 - b.Top - b.Height / 2)), b);
-        //        }
-        //    }
-        //}
     }
 
 }

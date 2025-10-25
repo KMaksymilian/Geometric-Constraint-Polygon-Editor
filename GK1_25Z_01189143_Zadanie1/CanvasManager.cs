@@ -22,6 +22,15 @@ namespace GK1_25Z_01189143_Zadanie1
             Canvas = new Bitmap(width, height);
             Offscreen = new Bitmap(width, height);
         }
+        internal void DrawTo(Graphics graphics)
+        {
+            using (Graphics g = Graphics.FromImage(Canvas))
+            {
+                g.DrawImage(Offscreen, 0, 0);
+            }
+            if (Canvas != null)
+                graphics.DrawImage(Canvas, 0, 0);
+        }
 
         public void Resize(int width, int height)
         {
@@ -53,21 +62,22 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void DrawEdge(Edge edge, Color color)
         {
-            var (x0, y0) = (edge.A.Center.X, edge.A.Center.Y);
-            var (x1, y1) = (edge.B.Center.X, edge.B.Center.Y);
-            Point a = new Point(x0, y0);
-            Point b = new Point(x1, y1);
-            using Graphics g = Graphics.FromImage(Offscreen);
-            if (useLibDrawing)
-            {
-                using Pen pen = new Pen(color, 1);
-                g.DrawLine(pen, a, b);
-            }
-            else DrawLine(a, b, color);
-                edge.DrawLabel(g);  
+            Point a = edge.A.Position;
+            Point b = edge.B.Position;
+            DrawLine(a, b, color);
         }
 
         public void DrawLine(Point a, Point b, Color color)
+        {
+            if (useLibDrawing)
+            {
+                using Graphics g = Graphics.FromImage(Offscreen);
+                using Pen pen = new Pen(color, 1);
+                g.DrawLine(pen, a, b);
+            }
+            else MyDrawLine(a, b, color);
+        }
+        public void MyDrawLine(Point a, Point b, Color color)
         {
 
             var (x0, y0) = (a.X, a.Y);
@@ -120,29 +130,19 @@ namespace GK1_25Z_01189143_Zadanie1
             }          
         }
 
-        internal void DrawTo(Graphics graphics)
-        {
-            using (Graphics g = Graphics.FromImage(Canvas))
-            {
-                g.DrawImage(Offscreen, 0, 0);
-            }
-            if (Canvas != null)
-                graphics.DrawImage(Canvas, 0, 0);
-        }
-
         internal void DrawBezierEdge(Edge edge, Color color)
         {
             if (edge.Ctrl1 == null || edge.Ctrl2 == null) throw new Exception();
             DrawEdge(edge, Color.Gray);
-            DrawEdge(new Edge(edge.A, edge.Ctrl1), Color.LightGray);
-            DrawEdge(new Edge(edge.Ctrl2, edge.B), Color.LightGray);
-            DrawEdge(new Edge(edge.Ctrl1, edge.Ctrl2), Color.LightGray);
+            DrawLine(edge.A.Position, edge.Ctrl1.Position, Color.LightGray);
+            DrawLine(edge.Ctrl2.Position, edge.B.Position, Color.LightGray);
+            DrawLine(edge.Ctrl1.Position, edge.Ctrl2.Position, Color.LightGray);
             
 
-            PointF p0 = edge.A.Center;
-            PointF p1 = edge.Ctrl1.Center;
-            PointF p2 = edge.Ctrl2.Center;
-            PointF p3 = edge.B.Center;
+            PointF p0 = edge.A.Position;
+            PointF p1 = edge.Ctrl1.Position;
+            PointF p2 = edge.Ctrl2.Position;
+            PointF p3 = edge.B.Position;
 
             const int segments = 1000;
             PointF prev = p0;
@@ -161,8 +161,8 @@ namespace GK1_25Z_01189143_Zadanie1
             using (Graphics g = Graphics.FromImage(Offscreen))
             {
                 
-                DrawContinuityLabel(g, edge.A.Center, edge.A.continuity);
-                DrawContinuityLabel(g, edge.B.Center, edge.B.continuity);
+                DrawContinuityLabel(g, edge.A.Position, edge.A.ContinuityStrategy.GetName());
+                DrawContinuityLabel(g, edge.B.Position, edge.B.ContinuityStrategy.GetName());
             }
                 
 
@@ -182,16 +182,14 @@ namespace GK1_25Z_01189143_Zadanie1
             return new PointF(x, y);
         }
 
-        private void DrawContinuityLabel(Graphics g, PointF pos, typeOfContinuity cont)
+        private void DrawContinuityLabel(Graphics g, PointF pos, string text)
         {
-          
-            string text = cont.ToString(); // "G0", "G1", "C1"
             using Font font = new Font("Segoe UI", 9, FontStyle.Bold);
             SizeF size = g.MeasureString(text, font);
 
             RectangleF box = new RectangleF(
                 pos.X - size.Width / 2 - 4,
-                pos.Y - 25 - size.Height / 2, // nad punktem
+                pos.Y - 25 - size.Height / 2,
                 size.Width + 8,
                 size.Height + 4
             );
@@ -199,6 +197,22 @@ namespace GK1_25Z_01189143_Zadanie1
             g.FillRectangle(Brushes.White, box);
             g.DrawRectangle(Pens.Black, Rectangle.Round(box));
             g.DrawString(text, font, Brushes.Black, box.X + 4, box.Y + 2);
+        }
+
+        internal void DrawVertex(Vertex v, Color color)
+        {
+            const int radius = 5; 
+            int x = v.Position.X - radius;
+            int y = v.Position.Y - radius;
+
+            using (Graphics g = Graphics.FromImage(Offscreen))
+            {
+                using (Brush brush = new SolidBrush(color))
+                    g.FillEllipse(brush, x, y, radius * 2, radius * 2);
+
+                using (Pen pen = new Pen(color, 1))
+                    g.DrawEllipse(pen, x, y, radius * 2, radius * 2);
+            }
         }
     }
 }
