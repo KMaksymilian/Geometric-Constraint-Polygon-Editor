@@ -19,26 +19,20 @@ namespace GK1_25Z_01189143_Zadanie1
     }
     internal class Edge : IObserver
     {
-        private int _lengthConstraint;
+        private double _lengthConstraint;
         public Vertex A { get; }
         public Vertex B { get; }
         public IConstraintVisitable ConstraintStrategy { get; set; } = new NoneConstraint();
         public TypeOfEdge Type { get; set; }
         public Vertex? Ctrl1 { get; set; }
         public Vertex? Ctrl2 { get; set; }
-        public int LengthConstraint
+        public double LengthConstraint
         {
             get => _lengthConstraint;
             internal set
             {
                 if (value <= 0)
                 {
-                    MessageBox.Show(
-                        "Długość musi być większa od zera.",
-                        "Błąd wartości",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
                     return;
                 }
 
@@ -57,7 +51,7 @@ namespace GK1_25Z_01189143_Zadanie1
             B = b;
             A.AddObserver(this);
             B.AddObserver(this);
-            LengthConstraint = (int)Math.Sqrt(Math.Pow(B.Position.X - A.Position.X, 2) + Math.Pow(B.Position.Y - A.Position.Y, 2));
+            LengthConstraint = MathHelper.Distance(A.Position, B.Position);
             Type = TypeOfEdge.Line;
         }
 
@@ -86,8 +80,12 @@ namespace GK1_25Z_01189143_Zadanie1
             g.DrawString(label, font, Brushes.Black, MidPoint.X - textSize.Width / 2, MidPoint.Y - textSize.Height / 2);
         }
 
-
-        internal void MakeBezier()
+        internal (Vertex?, Vertex?) MakeLine()
+        {
+            Type = TypeOfEdge.Line;
+            return (Ctrl1, Ctrl2);
+        }
+        internal (Vertex, Vertex) MakeBezier()
         {
             Type = TypeOfEdge.Bezier;
 
@@ -97,14 +95,14 @@ namespace GK1_25Z_01189143_Zadanie1
             int dx = b.X - a.X;
             int dy = b.Y - a.Y;
 
-            if (Ctrl1 != null && Ctrl2 != null) return;
+            if (Ctrl1 != null && Ctrl2 != null) return (Ctrl1, Ctrl2);
 
             Ctrl1 = new Vertex((int)(a.X + dx / 3), (int)(a.Y + dy / 3));    
             Ctrl2 = new Vertex((int)(b.X - dx / 3), (int)(b.Y - dy / 3));
             Ctrl1.ChangeToCtrl();
             Ctrl2.ChangeToCtrl();
             ApplyContinuity();
-            return;
+            return (Ctrl1, Ctrl2);
         }
 
         internal void ApplyContinuity()

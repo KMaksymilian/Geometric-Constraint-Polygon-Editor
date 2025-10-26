@@ -38,6 +38,7 @@ namespace GK1_25Z_01189143_Zadanie1
                 else if (edge.Type == TypeOfEdge.Bezier) canvas.DrawBezierEdge(edge, Color.Red);
                 Vertices.ForEach(v => canvas.DrawVertex(v, Color.Blue));
             }
+            Vertices.ForEach(v => v.Moved = false);
         }
         public void AddVertex(Vertex v)
         {
@@ -154,10 +155,18 @@ namespace GK1_25Z_01189143_Zadanie1
 
             RedrawAll();
         }
-
+        internal void MakeEdgeLine(Edge e)
+        {
+            (Vertex? c1, Vertex? c2) = e.MakeLine();
+            if (c1 != null) Vertices.Remove(c1);
+            if (c2 != null) Vertices.Remove(c2);
+            RedrawAll();
+        }
         internal void MakeEdgeBezier(Edge e)
         {
-            e.MakeBezier();
+            (Vertex c1, Vertex c2) = e.MakeBezier();
+            Vertices.Add(c1);
+            Vertices.Add(c2);
             RedrawAll();
         }
         internal void SetContinuity(Vertex v, IContinuityVisitable continuity)
@@ -180,6 +189,7 @@ namespace GK1_25Z_01189143_Zadanie1
             if (MoveTester.GetInstance(Vertices, Edges).SetConstraintTest(nearest, constraint))
             {
                 nearest.SetConstraint(constraint);
+                Edges.Where(e => e.Type == TypeOfEdge.Bezier).ToList().ForEach(e => e.ApplyContinuity());
                 RedrawAll();
             }
             else MessageBox.Show(

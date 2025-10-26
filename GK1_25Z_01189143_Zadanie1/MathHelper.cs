@@ -32,5 +32,17 @@ namespace GK1_25Z_01189143_Zadanie1
 
             return Distance(p, new Point((int)projX, (int)projY));
         }
+
+        internal static Point ProjectPointOntoLine(Point p, Point a, Point b)
+        {
+
+            double dx = b.X - a.X;
+            double dy = b.Y - a.Y;
+
+            double t = ((p.X - a.X) * dx + (p.Y - a.Y) * dy) / (dx * dx + dy * dy);
+            t = Math.Max(0, Math.Min(1, t));
+
+            return new Point((int)(a.X + t * dx), (int)(a.Y + t * dy));
+        }
     }
 }

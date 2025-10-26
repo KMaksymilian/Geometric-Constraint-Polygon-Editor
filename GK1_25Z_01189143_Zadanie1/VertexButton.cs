@@ -29,7 +29,7 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void MoveTo(Point newPos)
         {
-            if (!Moved) return;
+            if (Moved) return;
             Position = newPos;
             Moved = true;
             NotifyObservers();

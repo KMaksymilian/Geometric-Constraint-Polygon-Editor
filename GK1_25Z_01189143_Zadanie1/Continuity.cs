@@ -22,23 +22,43 @@ namespace GK1_25Z_01189143_Zadanie1
             if (adjacent == null) return;
 
             Vertex refPoint = adjacent.Type == TypeOfEdge.Line
-                ? (adjacent.A == vertex ? adjacent.B : adjacent.A)
+                ? adjacent.OtherVertex(vertex)
                 : (isStart ? adjacent.Ctrl2 ?? adjacent.B : adjacent.Ctrl1 ?? adjacent.A);
 
             int refDx = vertex.Position.X - refPoint.Position.X;
             int refDy = vertex.Position.Y - refPoint.Position.Y;
 
-            double scale = MathHelper.Distance(vertex.Position, ctrl.Position) /
-                           MathHelper.Distance(refPoint.Position, vertex.Position);
+            double refLength = MathHelper.Distance(vertex.Position, refPoint.Position);
 
-            ctrl.MoveTo(new Point(
-                vertex.Position.X + (int)(refDx * scale),
-                vertex.Position.Y + (int)(refDy * scale)
-            ));
+
+            double ctrlLength = MathHelper.Distance(vertex.Position, ctrl.Position);
+
+            if (refLength < 1e-5 || ctrlLength < 1e-5)
+                return; 
+
+            double dirX = refDx / refLength;
+            double dirY = refDy / refLength;
+
+            double targetLength = ctrlLength; 
+
+            int newX = (int)Math.Round(vertex.Position.X + dirX * targetLength);
+            int newY = (int)Math.Round(vertex.Position.Y + dirY * targetLength);
+
+            double dot = (ctrl.Position.X - vertex.Position.X) * refDx +
+                         (ctrl.Position.Y - vertex.Position.Y) * refDy;
+            if (dot > 0) 
+            {
+                newX = (int)Math.Round(vertex.Position.X + dirX * targetLength);
+                newY = (int)Math.Round(vertex.Position.Y + dirY * targetLength);
+            }
+
+
+            ctrl.MoveToWithoutNotify(new Point(newX, newY));
         }
 
         public void VisitC1(Edge edge, Vertex vertex, Vertex ctrl, bool isStart)
         {
+            double C1Scale = 1.0 / 3.0;
             Edge? adjacent = (Edge?)vertex.Observers.FirstOrDefault(e => e != edge);
             if (adjacent == null) return;
 
@@ -49,86 +69,74 @@ namespace GK1_25Z_01189143_Zadanie1
             int refDx = vertex.Position.X - refPoint.Position.X;
             int refDy = vertex.Position.Y - refPoint.Position.Y;
 
-            double scale = 1.0 / 3.0;
+            if (refPoint.Type == TypeOfVertex.BCtrl)
+            {
+                C1Scale = 1;
+            }
+
             ctrl.MoveTo(new Point(
-                vertex.Position.X + (int)(refDx * scale),
-                vertex.Position.Y + (int)(refDy * scale)
+                vertex.Position.X + (int)(refDx * C1Scale),
+                vertex.Position.Y + (int)(refDy * C1Scale)
             ));
         }
     }
 
     class ContinuityApplierVisitorCtrlMoved : IContinuityVisitor
     {
-        public void VisitC1(Edge edge, Vertex vertex, Vertex ctrl, bool isStart)
-        {
-            Edge? otherEdge = (Edge?)vertex.Observers.FirstOrDefault(e => e != edge);
-            if (otherEdge == null) return;
-
-            if (otherEdge.Type == TypeOfEdge.Bezier) return;
-
-            int dx, dy;
-            switch (otherEdge.ConstraintStrategy)
-            {
-                case VerticalConstraint _:
-                    vertex.MoveTo(new Point(ctrl.Position.X, vertex.Position.Y));
-                    break;
-                case DiagonalConstraint _:
-                    dx = vertex.Position.X - ctrl.Position.X;
-                    dy = vertex.Position.Y - ctrl.Position.Y;
-                    int sy = Math.Sign(dy);
-                    vertex.MoveTo(new Point(vertex.Position.X, ctrl.Position.Y + sy * Math.Abs(dx)));
-                    break;
-                default:
-                    dx = vertex.Position.X - ctrl.Position.X;
-                    dy = vertex.Position.Y - ctrl.Position.Y;
-                    Vertex toMove = otherEdge.OtherVertex(vertex);
-                    double scale = MathHelper.Distance(ctrl.Position, vertex.Position) / MathHelper.Distance(vertex.Position, toMove.Position);
-                    toMove.MoveTo(new Point(
-                        vertex.Position.X + (int)(dx * scale),
-                        vertex.Position.Y + (int)(dy * scale)
-                    ));
-                    break;
-
-            }
-        }
-
         public void VisitG0(Edge edge, Vertex vertex, Vertex ctrl, bool isStart) { }
 
         public void VisitG1(Edge edge, Vertex vertex, Vertex ctrl, bool isStart)
         {
-            Edge? otherEdge = (Edge?)vertex.Observers.FirstOrDefault(e => e != edge);
-            if (otherEdge == null) return;
+            ApplyContinuityForVertexMoved(edge, vertex, ctrl, isStart, isC1: false);
+        }
 
-            if (otherEdge.Type == TypeOfEdge.Bezier) return;
+        public void VisitC1(Edge edge, Vertex vertex, Vertex ctrl, bool isStart)
+        {
+            ApplyContinuityForVertexMoved(edge, vertex, ctrl, isStart, isC1: true);
+        }
+
+        private void ApplyContinuityForVertexMoved(Edge edge, Vertex vertex, Vertex ctrl, bool isStart, bool isC1)
+        {
+            Edge? otherEdge = vertex.Observers.FirstOrDefault(e => e != edge) as Edge;
+            if (otherEdge == null || otherEdge.Type == TypeOfEdge.Bezier) return;
 
             switch (otherEdge.ConstraintStrategy)
             {
                 case VerticalConstraint _:
                     vertex.MoveToWithoutNotify(new Point(ctrl.Position.X, vertex.Position.Y));
-                    
-                    break;
-                case DiagonalConstraint _:
-                    int dxh = vertex.Position.X - ctrl.Position.X;
-                    int dyh = vertex.Position.Y - ctrl.Position.Y;
-                    int sy = Math.Sign(dyh);
-                    vertex.MoveToWithoutNotify(new Point(vertex.Position.X, ctrl.Position.Y + sy * Math.Abs(dxh)));
-                    break;
-                default:
                     break;
 
+                case DiagonalConstraint _:
+                    int dx = vertex.Position.X - ctrl.Position.X;
+                    int dy = vertex.Position.Y - ctrl.Position.Y;
+                    int sy = Math.Sign(dy);
+                    vertex.MoveToWithoutNotify(new Point(vertex.Position.X, ctrl.Position.Y + sy * Math.Abs(dx)));
+                    break;
+
+                default:
+                    break;
             }
-            int dx = vertex.Position.X - ctrl.Position.X;
-            int dy = vertex.Position.Y - ctrl.Position.Y;
+
+            int vecX = vertex.Position.X - ctrl.Position.X;
+            int vecY = vertex.Position.Y - ctrl.Position.Y;
+
             Vertex toMove = otherEdge.OtherVertex(vertex);
-            double scale = 3.0;
-            toMove.MoveTo(new Point(
-                vertex.Position.X + (int)(dx * scale),
-                vertex.Position.Y + (int)(dy * scale)
-            ));
+
+            double length = MathHelper.Distance(ctrl.Position, vertex.Position);
+            double refLength = MathHelper.Distance(vertex.Position, toMove.Position);
+            if (length < 1e-5) return;
+
+            double scale = isC1 ?  3.0 : refLength / length;
+
+            int newX = (int)Math.Round(vertex.Position.X + vecX * scale);
+            int newY = (int)Math.Round(vertex.Position.Y + vecY * scale);
+
+            toMove.MoveTo(new Point(newX, newY));
         }
     }
 
-    interface IContinuityVisitable
+
+    interface IContinuityVisitable : IVisitable
     {
         void Accept(IContinuityVisitor visitor, Edge edge, Vertex vertex, Vertex ctrl, bool isStart);
         string GetName();

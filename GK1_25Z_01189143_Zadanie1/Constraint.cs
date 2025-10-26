@@ -20,7 +20,7 @@ namespace GK1_25Z_01189143_Zadanie1
         public void VisitVertical(Edge edge, Vertex x)
         {
             Vertex toMove = edge.OtherVertex(x);
-            toMove.MoveTo(new Point(toMove.Position.X, x.Position.Y));
+            toMove.MoveTo(new Point(x.Position.X, toMove.Position.Y));
         }
 
         public void VisitDiagonal(Edge edge, Vertex x)
@@ -29,6 +29,7 @@ namespace GK1_25Z_01189143_Zadanie1
             int dx = toMove.Position.X - x.Position.X;
             int dy = toMove.Position.Y - x.Position.Y;
             int sy = Math.Sign(dy);
+            if (dy == 0) sy = 1;
             toMove.MoveTo(new Point(toMove.Position.X, x.Position.Y + sy * Math.Abs(dx)));
         }
 
@@ -39,15 +40,18 @@ namespace GK1_25Z_01189143_Zadanie1
             if (length == 0) return;
 
             double scale = edge.LengthConstraint / length;
-            int newX = x.Position.X + (int)((toMove.Position.X - x.Position.X) * scale);
-            int newY = x.Position.Y + (int)((toMove.Position.Y - x.Position.Y) * scale);
+            int newX = (int)Math.Round(x.Position.X + ((toMove.Position.X - x.Position.X) * scale));
+            int newY = (int)Math.Round(x.Position.Y + ((toMove.Position.Y - x.Position.Y) * scale));
             toMove.MoveTo(new Point(newX, newY));
         }
 
         public void VisitNone(Edge edge, Vertex x) { }
     }
 
-    interface IConstraintVisitable
+    interface IVisitable
+    { }
+
+    interface IConstraintVisitable : IVisitable
     {
         void Accept(IConstraintVisitor visitor, Edge edge, Vertex movedVertex);
         string GetName(Edge edge);
@@ -62,10 +66,11 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void ApplyFirstTime(Edge edge)
         {
-            int dist = (int) MathHelper.Distance(edge.A.Position, edge.B.Position)/2;
-            int sign = Math.Sign(edge.B.Position.Y - edge.A.Position.Y);
-            edge.B.MoveToWithoutNotify(new Point(edge.MidPoint.X, edge.B.Position.Y + sign * dist));
-            edge.A.MoveTo(new Point(edge.MidPoint.X, edge.A.Position.Y - sign * dist));
+            int midX = edge.MidPoint.X;
+            int half = (int)Math.Round(MathHelper.Distance(edge.A.Position, edge.B.Position) / 2);
+
+            edge.A.MoveToWithoutNotify(new Point(midX, edge.MidPoint.Y + half));
+            edge.B.MoveTo(new Point(midX, edge.MidPoint.Y - half));
         }
 
         public bool CheckConstrain(Edge edge) => edge.A.Position.X == edge.B.Position.X;
@@ -79,11 +84,27 @@ namespace GK1_25Z_01189143_Zadanie1
 
         public void ApplyFirstTime(Edge edge)
         {
-            int dist = (int)Math.Sqrt(MathHelper.Distance(edge.A.Position, edge.B.Position));
-            int signX = Math.Sign(edge.B.Position.X - edge.A.Position.X);
-            int signY = Math.Sign(edge.B.Position.Y - edge.A.Position.Y);
-            edge.B.MoveToWithoutNotify(new Point(edge.MidPoint.X + signX * dist, edge.MidPoint.Y + signY * dist));
-            edge.A.MoveTo(new Point(edge.MidPoint.X - signX * dist, edge.MidPoint.Y - signY * dist));
+            Point mid = edge.MidPoint;
+
+
+            int dx = edge.A.Position.X - edge.MidPoint.X;
+            int dy = edge.A.Position.Y - edge.MidPoint.Y;
+
+            double length = Math.Sqrt(dx * dx + dy * dy);
+            if (length < 1e-5) length = 1; 
+
+            double dist = MathHelper.Distance(edge.A.Position, edge.MidPoint) / Math.Sqrt(2);
+
+            int sx = Math.Sign(dx);
+            int sy = Math.Sign(dy);
+            if (sx == 0) sx = 1;
+            if (sy == 0) sy = 1;
+
+            int newDx = (int)Math.Round(dist * sx);
+            int newDy = (int)Math.Round(dist * sy);
+
+            edge.A.MoveToWithoutNotify(new Point(mid.X + newDx, mid.Y + newDy));
+            edge.B.MoveTo(new Point(mid.X - newDx, mid.Y - newDy));
         }
 
         public bool CheckConstrain(Edge edge)
@@ -91,7 +112,7 @@ namespace GK1_25Z_01189143_Zadanie1
             int dx = edge.B.Position.X - edge.A.Position.X;
             int dy = edge.B.Position.Y - edge.A.Position.Y;
 
-         
+
             return Math.Abs(Math.Abs(dx) - Math.Abs(dy)) <= 1;
         }
 
@@ -112,7 +133,7 @@ namespace GK1_25Z_01189143_Zadanie1
             edge.B.MoveTo(new Point(edge.MidPoint.X + dx, edge.MidPoint.Y + dy));
         }
 
-        public bool CheckConstrain(Edge edge) => Math.Abs(MathHelper.Distance(edge.A.Position, edge.B.Position) - edge.LengthConstraint) < 1e-5;
+        public bool CheckConstrain(Edge edge) => Math.Abs(MathHelper.Distance(edge.A.Position, edge.B.Position) - edge.LengthConstraint) < 1;
 
         public string GetName(Edge edge) => $"{edge.LengthConstraint}";
     }

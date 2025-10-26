@@ -65,6 +65,14 @@ namespace GK1_25Z_01189143_Zadanie1
             Point a = edge.A.Position;
             Point b = edge.B.Position;
             DrawLine(a, b, color);
+            string txt = edge.ConstraintStrategy.GetName(edge);
+            if (txt != "None")
+            {
+                using (Graphics g = Graphics.FromImage(Offscreen))
+                {
+                    DrawLabel(g, edge.MidPoint, txt);
+                }
+            }
         }
 
         public void DrawLine(Point a, Point b, Color color)
@@ -161,8 +169,8 @@ namespace GK1_25Z_01189143_Zadanie1
             using (Graphics g = Graphics.FromImage(Offscreen))
             {
                 
-                DrawContinuityLabel(g, edge.A.Position, edge.A.ContinuityStrategy.GetName());
-                DrawContinuityLabel(g, edge.B.Position, edge.B.ContinuityStrategy.GetName());
+                DrawLabel(g, edge.A.Position, edge.A.ContinuityStrategy.GetName());
+                DrawLabel(g, edge.B.Position, edge.B.ContinuityStrategy.GetName());
             }
                 
 
@@ -182,14 +190,14 @@ namespace GK1_25Z_01189143_Zadanie1
             return new PointF(x, y);
         }
 
-        private void DrawContinuityLabel(Graphics g, PointF pos, string text)
+        private void DrawLabel(Graphics g, PointF pos, string text)
         {
             using Font font = new Font("Segoe UI", 9, FontStyle.Bold);
             SizeF size = g.MeasureString(text, font);
 
             RectangleF box = new RectangleF(
                 pos.X - size.Width / 2 - 4,
-                pos.Y - 25 - size.Height / 2,
+                pos.Y - 15 - size.Height / 2,
                 size.Width + 8,
                 size.Height + 4
             );

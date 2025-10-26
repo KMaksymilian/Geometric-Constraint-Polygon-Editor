@@ -3,32 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\edge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\edge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\contraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\contraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\canvasmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\canvasmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\edge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\edge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\constraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\constraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\polygonmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\polygonmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\vertexbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\vertexbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\continuity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\continuity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\movetester.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\movetester.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\mathhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\mathhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\vertexbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\vertexbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|c:\\users\\admin\\source\\repos\\wut-mini\\gk1_25z_01189143_zadanie1\\gk1_25z_01189143_zadanie1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|solutionrelative:gk1_25z_01189143_zadanie1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3EF3BDEE-AFF8-4D5F-82E8-B53879D1C591}|GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1.csproj|C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\gk1_25z_01189143_zadanie1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -42,8 +54,36 @@
       "DocumentGroups": [
         {
           "DockedWidth": 333,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 12,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Constraint.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Constraint.cs",
+              "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Constraint.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Constraint.cs",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Constraint.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAIAxwDgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-25T16:52:57.257Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MathHelper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\MathHelper.cs",
+              "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\MathHelper.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\MathHelper.cs",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\MathHelper.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowCQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-25T16:59:21.933Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
@@ -65,72 +105,94 @@
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Contraint.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Contraint.cs",
-              "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Contraint.cs",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Contraint.cs*",
-              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Contraint.cs*",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAABQAAAAsAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "MoveTester.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\MoveTester.cs",
+              "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\MoveTester.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\MoveTester.cs",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\MoveTester.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAmwGkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T16:52:57.257Z",
+              "WhenOpened": "2025-10-25T19:39:31.929Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "Continuity.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Continuity.cs",
+              "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Continuity.cs",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Continuity.cs",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Continuity.cs",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAiwIEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-25T18:00:39.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "PolygonManager.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\PolygonManager.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\PolygonManager.cs",
               "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\PolygonManager.cs",
               "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\PolygonManager.cs",
-              "ViewState": "AgIAAAYBAAAAAAAAAAAkwDIBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAALUAAAAAAAAAAADgv78AAABpAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T14:22:15.491Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "CanvasManager.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\CanvasManager.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\CanvasManager.cs",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\CanvasManager.cs",
-              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\CanvasManager.cs",
-              "ViewState": "AgIAAIIAAAAAAAAAAAAcwD4AAAAwAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\CanvasManager.cs*",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\CanvasManager.cs*",
+              "ViewState": "AgIAAKwAAAAAAAAAAAAkwMcAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T14:20:49.617Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Edge.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Edge.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Edge.cs",
-              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Edge.cs*",
-              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Edge.cs*",
-              "ViewState": "AgIAACYAAAAAAAAAAAAswDgAAAA3AAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Edge.cs",
+              "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Edge.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAwCIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-18T14:17:36.21Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "VertexButton.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\VertexButton.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\VertexButton.cs",
               "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\VertexButton.cs",
               "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\VertexButton.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAgwB8AAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T14:15:37.61Z"
+              "WhenOpened": "2025-10-18T14:15:37.61Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 9,
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Form1.Designer.cs",
@@ -143,28 +205,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Form1.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Form1.cs",
               "ToolTip": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Form1.cs",
               "RelativeToolTip": "GK1_25Z_01189143_Zadanie1\\Form1.cs",
-              "ViewState": "AgIAAAEBAAAAAAAAAAAhwFgBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAYwBABAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-12T10:34:17.979Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Admin\\source\\repos\\WUT-MiNI\\GK1_25Z_01189143_Zadanie1\\GK1_25Z_01189143_Zadanie1\\Form1.cs",
               "RelativeDocumentMoniker": "GK1_25Z_01189143_Zadanie1\\Form1.cs",

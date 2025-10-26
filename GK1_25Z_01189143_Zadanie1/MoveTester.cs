@@ -42,7 +42,6 @@ namespace GK1_25Z_01189143_Zadanie1
                 {
                     Type = v.Type,
                     Moved = v.Moved,
-                    ContinuityStrategy = v.ContinuityStrategy
                 };
                 return clone;
             }).ToList();
@@ -55,15 +54,15 @@ namespace GK1_25Z_01189143_Zadanie1
                 Vertex newA = newVertices.First(v => v.Position == e.A.Position && v.Type == TypeOfVertex.Normal);
                 Vertex newB = newVertices.First(v => v.Position == e.B.Position && v.Type == TypeOfVertex.Normal);
 
-                newA.AddObserver(e);
-                newB.AddObserver(e);
-
                 Edge newEdge = new Edge(newA, newB)
                 {
                     Type = e.Type,
                     ConstraintStrategy = e.ConstraintStrategy,
                     LengthConstraint = e.LengthConstraint
                 };
+
+                newA.AddObserver(newEdge);
+                newB.AddObserver(newEdge);
 
                 if (e.Ctrl1 != null)
                     newEdge.Ctrl1 = newVertices.First(v => v.Position == e.Ctrl1.Position && v.Type == TypeOfVertex.BCtrl);
