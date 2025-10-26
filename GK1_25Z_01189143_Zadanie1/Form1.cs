@@ -102,7 +102,7 @@ namespace GK1_25Z_01189143_Zadanie1
                 else
                 {
                     Edge? nearest = polygon.FindNearestLine(e.Location, maxDistance);
-                    if(nearest != null) EdgeMenu(e.Location, nearest);
+                    if (nearest != null) EdgeMenu(e.Location, nearest);
                 }
             }
             else if (e.Button == MouseButtons.Left)
@@ -126,14 +126,14 @@ namespace GK1_25Z_01189143_Zadanie1
             Point snapPoint = MathHelper.ProjectPointOntoLine(location, nearest.A.Position, nearest.B.Position);
 
             ContextMenuStrip menu = new ContextMenuStrip();
-            menu.Items.Add("Dodaj punkt", null, (s, ev) =>
+            menu.Items.Add("Add vartex", null, (s, ev) =>
             {
                 Vertex v = new Vertex(nearest.MidPoint.X, nearest.MidPoint.Y);
                 polygon.AddVertexOnEdge(v, nearest);
                 Invalidate();
             });
 
-            var curveItem = new ToolStripMenuItem("Krzywa (Bézier)");
+            var curveItem = new ToolStripMenuItem("Curve (Bézier)");
             curveItem.Checked = nearest.Type == TypeOfEdge.Bezier;
             curveItem.Click += (s, ev) =>
             {
@@ -147,25 +147,24 @@ namespace GK1_25Z_01189143_Zadanie1
 
             menu.Items.Add(curveItem);
 
-            var advancedItem = new ToolStripMenuItem("Ograniczenia");
+            var advancedItem = new ToolStripMenuItem("Constraints");
 
             advancedItem.DropDownItems.Add(
-                MakeConstraintItem("Brak", new NoneConstraint(), () =>
+                MakeConstraintItem("None", new NoneConstraint(), () =>
                 {
                     polygon.SetConstraintOnEdge(nearest, new NoneConstraint());
                     Invalidate();
                 }, nearest)
             );
 
-            // Pionowa
             advancedItem.DropDownItems.Add(
-                MakeConstraintItem("Pionowa", new VerticalConstraint(), () =>
+                MakeConstraintItem("Vertical", new VerticalConstraint(), () =>
                 {
                     int index = polygon.Edges.IndexOf(nearest);
-                    if (polygon.Edges[(index + 1) % polygon.Edges.Count].ConstraintStrategy.GetType() == new VerticalConstraint().GetType() || 
+                    if (polygon.Edges[(index + 1) % polygon.Edges.Count].ConstraintStrategy.GetType() == new VerticalConstraint().GetType() ||
                             polygon.Edges[(index - 1 + polygon.Edges.Count) % polygon.Edges.Count].ConstraintStrategy.GetType() == new VerticalConstraint().GetType())
                     {
-                        MessageBox.Show("Nie można ustawić dwóch sąsiednich odcinków jako pionowe.", "Błąd ograniczenia", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Cannot set two adjacent edges as vertical.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     polygon.SetConstraintOnEdge(nearest, new VerticalConstraint());
@@ -173,22 +172,20 @@ namespace GK1_25Z_01189143_Zadanie1
                 }, nearest)
             );
 
-            // Skośna
             advancedItem.DropDownItems.Add(
-                MakeConstraintItem("Skośna 45°", new DiagonalConstraint(), () =>
+                MakeConstraintItem("Diagonal 45°", new DiagonalConstraint(), () =>
                 {
                     polygon.SetConstraintOnEdge(nearest, new DiagonalConstraint());
                     Invalidate();
                 }, nearest)
             );
 
-            // Stała długość – popup z możliwością edycji
-            var constItem = MakeConstraintItem("Długość...", new ConstConstraint(), () =>
+            var constItem = MakeConstraintItem("Length...", new ConstConstraint(), () =>
             {
                 double currentLength = nearest.LengthConstraint;
                 string input = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Podaj długość odcinka:",
-                    "Ograniczenie długości",
+                        "Enter edge length:",
+                        "Length Constraint",
                     currentLength.ToString("0")
                 );
 
@@ -209,9 +206,9 @@ namespace GK1_25Z_01189143_Zadanie1
         {
             Point snapPoint = new Point(v.Position.X, v.Position.Y);
             ContextMenuStrip menu = new ContextMenuStrip();
-            menu.Items.Add("Usuń wierzchoek", null, (s, ev) => { polygon.RemoveVertex(v); Invalidate(); });
+            menu.Items.Add("Remove Vertex", null, (s, ev) => { polygon.RemoveVertex(v); Invalidate(); });
 
-            var advancedItem = new ToolStripMenuItem("Ciągłości");
+            var advancedItem = new ToolStripMenuItem("Continuity...");
 
             advancedItem.DropDownItems.Add(
                 MakeConstraintItem("G0", new ContinuityG0(), () =>
@@ -243,7 +240,7 @@ namespace GK1_25Z_01189143_Zadanie1
         private ToolStripMenuItem MakeConstraintItem(string text, IVisitable c, Action onClick, object nearest)
         {
             var item = new ToolStripMenuItem(text);
-                
+
             if (nearest is Edge edge) item.Checked = edge.ConstraintStrategy.GetType() == c.GetType();
             else if (nearest is Vertex vertex) item.Checked = vertex.ContinuityStrategy.GetType() == c.GetType();
             item.Click += (s, ev) => onClick();
@@ -275,6 +272,17 @@ namespace GK1_25Z_01189143_Zadanie1
                 polygon.RedrawAll();
                 Invalidate();
             }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string instructions =
+        "LMB + Vertex -> Move the vertex\n" +
+        "LMB + Empty space -> Move the entire figure\n" +
+        "RMB + Vertex -> Vertex options\n" +
+        "RMB + Edge -> Edge options";
+
+            MessageBox.Show(instructions, "Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 

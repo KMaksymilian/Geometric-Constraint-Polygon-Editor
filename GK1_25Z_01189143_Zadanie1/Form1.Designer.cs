@@ -33,13 +33,14 @@
             panel1 = new Panel();
             self = new RadioButton();
             lib = new RadioButton();
+            helpToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { restartToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { restartToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -88,6 +89,13 @@
             lib.UseVisualStyleBackColor = true;
             lib.CheckedChanged += lib_CheckedChanged;
             // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            helpToolStripMenuItem.Click += helpToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -113,5 +121,6 @@
         private Panel panel1;
         private RadioButton self;
         private RadioButton lib;
+        private ToolStripMenuItem helpToolStripMenuItem;
     }
 }
