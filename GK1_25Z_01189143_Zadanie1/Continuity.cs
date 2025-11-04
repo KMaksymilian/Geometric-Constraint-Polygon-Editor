@@ -113,6 +113,7 @@ namespace GK1_25Z_01189143_Zadanie1
                     vertex.MoveToWithoutNotify(new Point(vertex.Position.X, ctrl.Position.Y + sy * Math.Abs(dx)));
                     break;
 
+                
                 default:
                     break;
             }
@@ -125,13 +126,27 @@ namespace GK1_25Z_01189143_Zadanie1
             double length = MathHelper.Distance(ctrl.Position, vertex.Position);
             double refLength = MathHelper.Distance(vertex.Position, toMove.Position);
             if (length < 1e-5) return;
+            double scale = isC1 ? 3.0 : refLength / length;
 
-            double scale = isC1 ?  3.0 : refLength / length;
+            if (otherEdge.ConstraintStrategy is ConstConstraint && isC1)
+            {
+                int dx = toMove.Position.X - vertex.Position.X;
+                int dy = toMove.Position.Y - vertex.Position.Y;
+                int newX = (int)Math.Round(ctrl.Position.X + dx / scale);
+                int newY = (int)Math.Round(ctrl.Position.Y + dy / scale);
+                vertex.MoveTo(new Point(newX, newY));
+            }
+            else
+            {
 
-            int newX = (int)Math.Round(vertex.Position.X + vecX * scale);
-            int newY = (int)Math.Round(vertex.Position.Y + vecY * scale);
+               
 
-            toMove.MoveTo(new Point(newX, newY));
+                int newX = (int)Math.Round(vertex.Position.X + vecX * scale);
+                int newY = (int)Math.Round(vertex.Position.Y + vecY * scale);
+
+                toMove.MoveTo(new Point(newX, newY));
+            }
+
         }
     }
 

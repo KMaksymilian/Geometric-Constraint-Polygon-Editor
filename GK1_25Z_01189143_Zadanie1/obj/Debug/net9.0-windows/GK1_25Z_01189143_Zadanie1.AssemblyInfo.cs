@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GK1_25Z_01189143_Zadanie1")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed5f50016a6336aea34fb37a8f3500df0555cf0d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec7e91c58d7b4fb577710e03b03d533d7f7334ae")]
 [assembly: System.Reflection.AssemblyProductAttribute("GK1_25Z_01189143_Zadanie1")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GK1_25Z_01189143_Zadanie1")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
